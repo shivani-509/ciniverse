@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,18 +38,9 @@
             font-size: 16px;
         }
 
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 15px;
-            margin: 10px 5px;
-        }
-
         .movies {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             padding: 30px;
         }
@@ -62,7 +54,7 @@
 
         .movie img {
             width: 100%;
-            height: 350px;
+            height: 400px;
             object-fit: cover;
         }
 
@@ -74,30 +66,7 @@
             margin-top: 0;
         }
 
-        .add-form {
-            display: none;
-            background: white;
-            padding: 25px;
-            margin: 25px auto;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px #aaa;
-        }
-
-        .add-form input,
-        .add-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            font-size: 15px;
-        }
-
-        .delete-btn {
-            background: #333;
-            color: white;
-        }
-
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
             .movies {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -113,255 +82,104 @@
 
 <body>
 
-    <header>
-        <h1>🎬 CineVerse</h1>
-        <p>Discover exciting stories, unforgettable adventures and your next favorite movie.</p>
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search for a movie..."
-            onkeyup="searchMovies()"
-        >
-
-        <br>
-
-        <button onclick="showForm()">+ Add Movie</button>
-    </header>
-
-
-    <div class="add-form" id="addForm">
-
-        <h2>Add a New Movie</h2>
-
-        <input
-            type="text"
-            id="movieTitle"
-            placeholder="Movie Title"
-        >
-
-        <textarea
-            id="movieDescription"
-            placeholder="Movie Description"
-        ></textarea>
-
-        <input
-            type="text"
-            id="movieImage"
-            placeholder="Movie Poster Image URL"
-        >
-
-        <button onclick="addMovie()">Add Movie</button>
-
-        <button onclick="hideForm()">Cancel</button>
-
-    </div>
-
-
-    <div class="movies" id="movieContainer"></div>
-
-
-    <script>
-
-        // Load movies when page opens
-        async function loadMovies() {
-
-            try {
-
-                const response = await fetch("/api/movies");
-
-                const movies = await response.json();
-
-                const container =
-                    document.getElementById("movieContainer");
-
-                container.innerHTML = "";
-
-                movies.forEach(movie => {
-
-                    container.innerHTML += `
-                        <div class="movie">
-
-                            <img
-                                src="${movie.image}"
-                                alt="${movie.title}"
-                            >
-
-                            <div class="movie-info">
-
-                                <h2>${movie.title}</h2>
-
-                                <p>${movie.description}</p>
-
-                                <button
-                                    class="delete-btn"
-                                    onclick="deleteMovie('${movie._id}')"
-                                >
-                                    Delete
-                                </button>
-
-                            </div>
-
-                        </div>
-                    `;
-
-                });
-
-            } catch (error) {
-
-                console.log("Could not load movies:", error);
-
-            }
-
-        }
-
-
-        // Show Add Movie form
-        function showForm() {
-
-            document
-                .getElementById("addForm")
-                .style.display = "block";
-
-        }
-
-
-        // Hide Add Movie form
-        function hideForm() {
-
-            document
-                .getElementById("addForm")
-                .style.display = "none";
-
-        }
-
-
-        // Add a movie
-        async function addMovie() {
-
-            const title =
-                document.getElementById("movieTitle").value;
-
-            const description =
-                document.getElementById("movieDescription").value;
-
-            const image =
-                document.getElementById("movieImage").value;
-
-
-            if (!title || !description || !image) {
-
-                alert("Please fill in all fields.");
-
-                return;
-
-            }
-
-
-            try {
-
-                await fetch("/api/movies", {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        title,
-                        description,
-                        image
-                    })
-
-                });
-
-
-                document.getElementById("movieTitle").value = "";
-                document.getElementById("movieDescription").value = "";
-                document.getElementById("movieImage").value = "";
-
-
-                hideForm();
-
-                loadMovies();
-
-            } catch (error) {
-
-                alert("Could not add movie.");
-
-            }
-
-        }
-
-
-        // Delete a movie
-        async function deleteMovie(id) {
-
-            const confirmed =
-                confirm("Are you sure you want to delete this movie?");
-
-
-            if (!confirmed) return;
-
-
-            try {
-
-                await fetch(`/api/movies/${id}`, {
-
-                    method: "DELETE"
-
-                });
-
-
-                loadMovies();
-
-            } catch (error) {
-
-                alert("Could not delete movie.");
-
-            }
-
-        }
-
-
-        // Search movies
-        function searchMovies() {
-
-            const input =
-                document
-                    .getElementById("searchInput")
-                    .value
-                    .toLowerCase();
-
-
-            const movies =
-                document.querySelectorAll(".movie");
-
-
-            movies.forEach(movie => {
-
-                const title =
-                    movie
-                    .querySelector("h2")
-                    .innerText
-                    .toLowerCase();
-
-
-                movie.style.display =
-                    title.includes(input)
-                    ? ""
-                    : "none";
-
-            });
-
-        }
-
-
-        // Start by loading movies
-        loadMovies();
-
-    </script>
+<header>
+    <h1>🎬 CineVerse</h1>
+    <p>Discover exciting stories, unforgettable adventures and your next favorite movie.</p>
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search for a movie..."
+        onkeyup="searchMovies()"
+    >
+</header>
+
+<div class="movies" id="movieContainer"></div>
+
+<script>
+
+const movies = [
+    {
+        title: "Spider-Man: No Way Home",
+        description: "Peter Parker asks Doctor Strange for help after his identity is revealed, but the spell opens the multiverse.",
+        image: "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
+    },
+    {
+        title: "The Batman",
+        description: "Batman uncovers corruption in Gotham City while facing a mysterious serial killer known as the Riddler.",
+        image: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+    },
+    {
+        title: "Avengers: Endgame",
+        description: "The surviving Avengers assemble once more to reverse the damage caused by Thanos.",
+        image: "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
+    },
+    {
+        title: "Inception",
+        description: "A skilled thief who steals secrets through dreams is offered a chance to erase his criminal past.",
+        image: "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg"
+    },
+    {
+        title: "Interstellar",
+        description: "A group of explorers travel through a wormhole in space in search of a new home for humanity.",
+        image: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+    },
+    {
+        title: "Joker",
+        description: "A struggling comedian experiences events that lead him toward a violent transformation.",
+        image: "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
+    },
+    {
+        title: "John Wick",
+        description: "A retired hitman returns to his violent past after criminals steal his car and kill his dog.",
+        image: "https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg"
+    },
+    {
+        title: "Black Panther",
+        description: "T'Challa returns to Wakanda to take his rightful place as king and faces a powerful challenger.",
+        image: "https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"
+    }
+];
+
+function displayMovies(list) {
+
+    const container = document.getElementById("movieContainer");
+
+    container.innerHTML = "";
+
+    list.forEach(movie => {
+
+        container.innerHTML += `
+            <div class="movie">
+                <img src="${movie.image}" alt="${movie.title}">
+                <div class="movie-info">
+                    <h2>${movie.title}</h2>
+                    <p>${movie.description}</p>
+                </div>
+            </div>
+        `;
+
+    });
+}
+
+function searchMovies() {
+
+    const input = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const filtered = movies.filter(movie =>
+        movie.title.toLowerCase().includes(input)
+    );
+
+    displayMovies(filtered);
+}
+
+displayMovies(movies);
+
+</script>
 
 </body>
 </html>
+```
